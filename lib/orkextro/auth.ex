@@ -17,13 +17,23 @@ defmodule Orkextro.Auth do
   end
 
   defp do_get_access_token(username, password) do
-    case HTTPoison.post("#{ConfigHelper.get_endpoint()}/users/sign-in", [], %{
-           username: username,
-           password: Base.encode64(password)
-         }) do
-      {:ok, %{status_code: 400, body: body}} -> {:error, Jason.decode!(body)}
-      {:ok, %{status_code: 200, body: body}} -> {:ok, Jason.decode!(body)}
-      {:error, error} -> {:error, error}
+    params = %{
+      username: username,
+      password: Base.encode64(password)
+    }
+
+    case HTTPoison.post("#{ConfigHelper.get_endpoint()}/users/sign-in", Jason.encode!(params),
+           "Content-Type": "application/json"
+         ) do
+      {:ok, %{status_code: 200, body: body}} ->
+        {:ok, Jason.decode!(body)}
+
+      {:ok, %{status_code: _not_ok, body: body}} ->
+        IO.puts(body)
+        {:error, Jason.decode!(body)}
+
+      {:error, error} ->
+        {:error, error}
     end
   end
 end
