@@ -29,7 +29,6 @@ defmodule Orkextro.Auth do
         {:ok, Jason.decode!(body)}
 
       {:ok, %{status_code: _not_ok, body: body}} ->
-        IO.puts(body)
         {:error, Jason.decode!(body)}
 
       {:error, error} ->

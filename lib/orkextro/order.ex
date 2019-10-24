@@ -33,7 +33,6 @@ defmodule Orkextro.Order do
         {:ok, Jason.decode!(body)}
 
       {:ok, %{status_code: _not_ok, body: body} = all} ->
-        IO.puts("#{inspect(all)}")
         {:error, Jason.decode!(body)}
 
       {:error, error} ->
