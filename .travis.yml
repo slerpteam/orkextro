@@ -1,0 +1,15 @@
+language: elixir
+elixir:
+  - 1.9
+env:
+  - MIX_ENV=test
+install:
+  - mix deps.get
+  - mix deps.compile --warnings-as-errors
+script:
+  - mix format --check-formatted
+  - mix test
+cache:
+  directories:
+    - _build
+    - deps
