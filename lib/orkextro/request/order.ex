@@ -2,6 +2,7 @@ defmodule Orkextro.Request.Order do
   @moduledoc """
   This module handles delivery orders
   """
+  @api_key Application.get_env(:orkextro, :api_key)
 
   defp build_headers(api_key) do
     ["Content-Type": "application/json", "api-key": api_key]
@@ -11,17 +12,7 @@ defmodule Orkextro.Request.Order do
     "#{Orkextro.ConfigHelper.get_endpoint()}/orders"
   end
 
-  def create(params, api_key) do
-    with {:ok, %{"id" => order_id}} <- do_create(params, api_key),
-         {:ok, order} <- get(order_id, api_key) do
-      {:ok, order}
-    else
-      {:error, error} -> {:error, error}
-      edge -> {:error, edge}
-    end
-  end
-
-  def do_create(params, api_key) do
+  def create(params, api_key \\ @api_key) do
     case HTTPoison.post(
            build_url(),
            Jason.encode!(params),
