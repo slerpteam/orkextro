@@ -17,7 +17,7 @@ defmodule Orkextro.Request.Order do
            Jason.encode!(params),
            build_headers(api_key)
          ) do
-      {:ok, %{status_code: 202, body: body}} ->
+      {:ok, %{status_code: 201, body: body}} ->
         {:ok, Jason.decode!(body)}
 
       {:ok, %{status_code: _not_ok, body: body}} ->
