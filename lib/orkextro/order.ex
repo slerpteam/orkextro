@@ -18,4 +18,8 @@ defmodule Orkextro.Order do
   def get(order_id, api_key \\ @api_key) do
     @api.get_order(order_id, api_key)
   end
+
+  def cancel(order_id, api_key \\ @api_key) do
+    @api.cancel_order(order_id, api_key)
+  end
 end
