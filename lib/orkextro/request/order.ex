@@ -36,4 +36,22 @@ defmodule Orkextro.Request.Order do
       {:error, error} -> {:error, error}
     end
   end
+
+  def cancel(order_id, api_key) do
+    case HTTPoison.post(
+           "#{build_url()}/#{order_id}/cancel",
+           Jason.encode!(%{}),
+           build_headers(api_key)
+         ) do
+      {:ok, %{status_code: status_code, body: _body}}
+      when status_code >= 200 and status_code < 300 ->
+        {:ok, %{"id" => order_id}}
+
+      {:ok, %{status_code: _not_ok, body: body}} ->
+        {:error, Jason.decode!(body)}
+
+      {:error, error} ->
+        {:error, error}
+    end
+  end
 end
