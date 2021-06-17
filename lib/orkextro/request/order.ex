@@ -24,13 +24,20 @@ defmodule Orkextro.Request.Order do
          ) do
       {:ok, %{status_code: status_code, body: body}}
       when status_code >= 200 and status_code < 300 ->
-        {:ok, Jason.decode!(body)}
+        {:ok, parse(body)}
 
       {:ok, %{status_code: _not_ok, body: body}} ->
-        {:error, Jason.decode!(body)}
+        {:error, parse(body)}
 
       {:error, error} ->
         {:error, error}
+    end
+  end
+
+  defp parse(body) do
+    case Jason.decode(body) do
+      {:ok, parsed} -> parsed
+      {:error, _} -> body
     end
   end
 
